@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="editor-container">
+    <h2 class="editor-title">Meme Editor</h2>
+    
+    <div class="editor-wrapper">
+        <!-- Image Preview Section -->
+        <div class="image-preview-container">
+            <div class="image-preview">
+                <img id="meme-preview" src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Meme Preview">
+                <div class="preview-overlay">
+                    <div id="preview-top-text" class="preview-text top-text"></div>
+                    <div id="preview-bottom-text" class="preview-text bottom-text"></div>
+                </div>
+            </div>
+            <div class="image-actions">
+                <button id="zoom-in" class="action-btn">🔍 +</button>
+                <button id="zoom-out" class="action-btn">🔍 -</button>
+                <button id="reset-zoom" class="action-btn">⟲ Reset</button>
+            </div>
+        </div>
+        
+        <!-- Controls Section -->
+        <div class="controls">
+            <form id="meme-form" action="/generate_meme" method="POST">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                
+                <div class="form-section">
+                    <h3 class="section-title">Text Options</h3>
+                    
+                    <div class="form-group">
+                        <label for="top-text">Top Text:</label>
+                        <input type="text" id="top-text" name="top_text" placeholder="Enter top text" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bottom-text">Bottom Text:</label>
+                        <input type="text" id="bottom-text" name="bottom_text" placeholder="Enter bottom text" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="text-size">Text Size:</label>
+                        <input type="range" id="text-size" name="text_size" min="20" max="100" value="50" class="form-slider">
+                        <span id="text-size-value">50%</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="text-color">Text Color:</label>
+                        <input type="color" id="text-color" name="text_color" value="#ffffff" class="form-color">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Effects</h3>
+                    
+                    <div class="form-group">
+                        <label for="filter">Filter Style:</label>
+                        <select id="filter" name="filter" class="form-select">
+                            <option value="none">No Filter</option>
+                            <option value="cartoon">Cartoon</option>
+                            <option value="comic">Comic Book</option>
+                            <option value="pencil_sketch">Pencil Sketch</option>
+                            <option value="vintage">Vintage</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="brightness">Brightness:</label>
+                        <input type="range" id="brightness" name="brightness" min="0" max="200" value="100" class="form-slider">
+                        <span id="brightness-value">100%</span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn generate-btn">
+                        <span class="btn-icon">🖼️</span> Generate Meme
+                    </button>
+                    <button type="button" id="reset-btn" class="btn reset-btn">
+                        <span class="btn-icon">↺</span> Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --accent-color: #4895ef;
+    --dark-color: #2b2d42;
+    --light-color: #f8f9fa;
+    --success-color: #4cc9f0;
+    --warning-color: #f72585;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.editor-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    overflow: hidden;
+}
+
+.editor-title {
+    text-align: center;
+    color: var(--dark-color);
+    margin-bottom: 30px;
+    font-weight: 700;
+    position: relative;
+}
+
+.editor-title::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--accent-color);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.editor-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.image-preview-container {
+    flex: 1;
+    min-width: 300px;
+}
+
+.image-preview {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: #f0f0f0;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.preview-text {
+    color: white;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    text-shadow: 
+        2px 2px 0 #000,
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000;
+    font-size: 2.5em;
+    word-wrap: break-word;
+    width: 100%;
+}
+
+.top-text {
+    align-self: flex-start;
+}
+
+.bottom-text {
+    align-self: flex-end;
+}
+
+.image-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.controls {
+    flex: 1;
+    min-width: 300px;
+}
+
+.form-section {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    color: var(--dark-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border 0.3s ease;
+}
+
+.form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(72, 149, 239, 0.2);
+}
+
+.form-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    margin: 10px 0;
+}
+
+.form-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.form-color {
+    width: 50px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.generate-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.generate-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+}
+
+.reset-btn {
+    background: #f0f0f0;
+    color: var(--dark-color);
+}
+
+.reset-btn:hover {
+    background: #e0e0e0;
+}
+
+.btn-icon {
+    font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+    .editor-wrapper {
+        flex-direction: column;
+    }
+    
+    .image-preview {
+        max-height: 300px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const topTextInput = document.getElementById('top-text');
+    const bottomTextInput = document.getElementById('bottom-text');
+    const textSizeInput = document.getElementById('text-size');
+    const textSizeValue = document.getElementById('text-size-value');
+    const brightnessInput = document.getElementById('brightness');
+    const brightnessValue = document.getElementById('brightness-value');
+    const previewTopText = document.getElementById('preview-top-text');
+    const previewBottomText = document.getElementById('preview-bottom-text');
+    const memePreview = document.getElementById('meme-preview');
+    const resetBtn = document.getElementById('reset-btn');
+    const zoomInBtn = document.getElementById('zoom-in');
+    const zoomOutBtn = document.getElementById('zoom-out');
+    const resetZoomBtn = document.getElementById('reset-zoom');
+    
+    let currentScale = 1;
+    
+    // Update preview text
+    function updatePreview() {
+        previewTopText.textContent = topTextInput.value;
+        previewBottomText.textContent = bottomTextInput.value;
+        
+        // Update text size based on slider
+        const size = textSizeInput.value;
+        previewTopText.style.fontSize = `${size}px`;
+        previewBottomText.style.fontSize = `${size}px`;
+        textSizeValue.textContent = `${size}%`;
+    }
+    
+    // Update brightness display
+    brightnessInput.addEventListener('input', function() {
+        brightnessValue.textContent = `${this.value}%`;
+        memePreview.style.filter = `brightness(${this.value}%)`;
+    });
+    
+    // Reset form
+    resetBtn.addEventListener('click', function() {
+        topTextInput.value = '';
+        bottomTextInput.value = '';
+        textSizeInput.value = 50;
+        brightnessInput.value = 100;
+        brightnessValue.textContent = '100%';
+        memePreview.style.filter = 'brightness(100%)';
+        updatePreview();
+    });
+    
+    // Zoom functionality
+    zoomInBtn.addEventListener('click', function() {
+        currentScale += 0.1;
+        memePreview.style.transform = `scale(${currentScale})`;
+    });
+    
+    zoomOutBtn.addEventListener('click', function() {
+        if (currentScale > 0.5) {
+            currentScale -= 0.1;
+            memePreview.style.transform = `scale(${currentScale})`;
+        }
+    });
+    
+    resetZoomBtn.addEventListener('click', function() {
+        currentScale = 1;
+        memePreview.style.transform = 'scale(1)';
+    });
+    
+    // Event listeners for live preview
+    topTextInput.addEventListener('input', updatePreview);
+    bottomTextInput.addEventListener('input', updatePreview);
+    textSizeInput.addEventListener('input', updatePreview);
+    
+    // Initialize
+    updatePreview();
+});
+</script>
+{% endblock %}

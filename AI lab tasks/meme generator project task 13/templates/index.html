@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="celestial-container">
+    <!-- Heavenly Background Elements -->
+    <div class="angelic-background">
+        <div class="clouds"></div>
+        <div class="clouds"></div>
+        <div class="clouds"></div>
+        <div class="light-rays"></div>
+    </div>
+    
+    <div class="upload-container">
+        <div class="heavenly-header">
+            <i class="fas fa-cloud-upload-alt celestial-icon"></i>
+            <h2 class="divine-title">Angelic Meme Creator</h2>
+            <p class="heavenly-subtitle">Upload your image to begin crafting divine memes</p>
+        </div>
+        
+        <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+            <!-- Divine Upload Area -->
+            <div class="celestial-upload-box">
+                <div class="golden-gate"></div>
+                
+                <div class="drop-zone" id="drop-zone">
+                    <div class="angelic-upload-prompt">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <span class="drop-zone__prompt">Drop your image here or click to select</span>
+                        <span class="divine-hint">Supported formats: JPG, PNG, WEBP</span>
+                    </div>
+                    <input type="file" name="file" id="file-input" class="drop-zone__input" accept="image/*">
+                </div>
+                
+                <!-- Heavenly Preview -->
+                <div class="celestial-preview" id="image-preview" style="display: none;">
+                    <div class="halo-effect"></div>
+                    <img id="preview-image" src="#" alt="Preview" class="glowing-image">
+                    <div class="angel-wings left-wing"></div>
+                    <div class="angel-wings right-wing"></div>
+                </div>
+            </div>
+            
+            <div class="heavenly-actions">
+                <button type="submit" class="divine-button">
+                    <i class="fas fa-arrow-right"></i> Enter the Divine Editor
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="angelic-footer">
+        <p>Blessed by the Meme Gods <i class="fas fa-praying-hands"></i></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Heavenly Color Palette */
+:root {
+    --celestial-blue: #7ec0ee;
+    --heavenly-gold: #ffd700;
+    --divine-white: #fff9f0;
+    --angelic-pink: #ffb6c1;
+    --holy-purple: #9370db;
+    --cloud-white: rgba(255, 255, 255, 0.9);
+    --light-ray: rgba(255, 255, 255, 0.6);
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #80deea 100%);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    color: #333;
+}
+
+/* Angelic Background Elements */
+.angelic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.clouds {
+    position: absolute;
+    background: var(--cloud-white);
+    border-radius: 50%;
+    animation: float 30s infinite linear;
+}
+
+.clouds:nth-child(1) {
+    width: 200px;
+    height: 60px;
+    top: 20%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.clouds:nth-child(2) {
+    width: 300px;
+    height: 90px;
+    top: 50%;
+    right: -10%;
+    animation-delay: 10s;
+}
+
+.clouds:nth-child(3) {
+    width: 250px;
+    height: 75px;
+    bottom: 15%;
+    left: 20%;
+    animation-delay: 5s;
+}
+
+.light-rays {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle at center, var(--light-ray) 0%, transparent 70%);
+    top: -25%;
+    left: -25%;
+    animation: pulse 8s infinite alternate;
+}
+
+/* Main Container */
+.celestial-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.upload-container {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.heavenly-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.celestial-icon {
+    font-size: 3.5rem;
+    color: var(--heavenly-gold);
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.divine-title {
+    font-family: 'Playfair Display', serif;
+    color: #333;
+    font-size: 2.5rem;
+    margin: 0.5rem 0;
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--holy-purple), var(--celestial-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.heavenly-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+/* Divine Upload Area */
+.celestial-upload-box {
+    position: relative;
+    margin: 2rem 0;
+}
+
+.golden-gate {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--heavenly-gold), transparent);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 5px var(--heavenly-gold));
+}
+
+.drop-zone {
+    border: 3px dashed var(--celestial-blue);
+    border-radius: 15px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.7);
+    position: relative;
+    overflow: hidden;
+}
+
+.drop-zone::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(126, 192, 238, 0.1) 0%, rgba(255, 214, 0, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.drop-zone:hover::before {
+    opacity: 1;
+}
+
+.drop-zone--over {
+    border-color: var(--holy-purple);
+    background: rgba(147, 112, 219, 0.1);
+    transform: translateY(-5px);
+}
+
+.angelic-upload-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: var(--celestial-blue);
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover .upload-icon {
+    color: var(--holy-purple);
+    transform: scale(1.1);
+}
+
+.drop-zone__prompt {
+    display: block;
+    font-size: 1.3rem;
+    color: #444;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.divine-hint {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Celestial Preview */
+.celestial-preview {
+    position: relative;
+    margin: 2rem auto;
+    text-align: center;
+    display: none;
+}
+
+.halo-effect {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110%;
+    height: 110%;
+    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.glowing-image {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 3px solid white;
+    transition: all 0.3s ease;
+}
+
+.angel-wings {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150"><path fill="rgba(255,255,255,0.7)" d="M50,0 C70,30 90,50 100,80 C90,110 70,130 50,150 C30,130 10,110 0,80 C10,50 30,30 50,0 Z"/></svg>');
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.8;
+    z-index: -1;
+    animation: float 3s infinite ease-in-out;
+}
+
+.left-wing {
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%) rotate(10deg);
+    animation-delay: 0s;
+}
+
+.right-wing {
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-10deg);
+    animation-delay: 0.5s;
+}
+
+/* Heavenly Actions */
+.heavenly-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.divine-button {
+    background: linear-gradient(135deg, var(--holy-purple), var(--celestial-blue));
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(147, 112, 219, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.divine-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(147, 112, 219, 0.6);
+    background: linear-gradient(135deg, var(--celestial-blue), var(--holy-purple));
+}
+
+.divine-button:active {
+    transform: translateY(0);
+}
+
+/* Angelic Footer */
+.angelic-footer {
+    margin-top: 2rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .divine-title {
+        font-size: 2rem;
+    }
+    
+    .drop-zone {
+        padding: 2rem 1rem;
+    }
+    
+    .angel-wings {
+        width: 60px;
+        height: 90px;
+    }
+    
+    .left-wing {
+        left: -30px;
+    }
+    
+    .right-wing {
+        right: -30px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const previewImage = document.getElementById('preview-image');
+    const imagePreview = document.getElementById('image-preview');
+    
+    // Handle drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+        dropZone.classList.add('drop-zone--over');
+    }
+    
+    function unhighlight() {
+        dropZone.classList.remove('drop-zone--over');
+    }
+    
+    dropZone.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+    
+    // Handle file selection via click
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+            handleFiles(fileInput.files);
+        }
+    });
+    
+    function handleFiles(files) {
+        const file = files[0];
+        if (file.type.match('image.*')) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                imagePreview.style.display = 'block';
+                dropZone.style.display = 'none';
+                
+                // Add celestial celebration
+                createHeavenlyConfetti();
+            }
+            
+            reader.readAsDataURL(file);
+        } else {
+            alert('Please select an image file (JPEG, PNG, etc.)');
+        }
+    }
+    
+    function createHeavenlyConfetti() {
+        const colors = ['#7ec0ee', '#ffd700', '#ffb6c1', '#9370db', '#ffffff'];
+        
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.animationDelay = (Math.random() * 2) + 's';
+            document.body.appendChild(confetti);
+            
+            // Remove after animation
+            setTimeout(() => {
+                confetti.remove();
+            }, 5000);
+        }
+    }
+});
+</script>
+{% endblock %}

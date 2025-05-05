@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Heavenly Meme Generator{% endblock %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+    <style>
+        :root {
+            --primary-color: #f8f3ff;
+            --secondary-color: #e2c6ff;
+            --accent-color: #c792ea;
+            --text-color: #3a2e4d;
+            --light-shadow: 0 4px 20px rgba(199, 146, 234, 0.15);
+        }
+    </style>
+</head>
+<body class="heavenly-bg">
+    <div class="angelic-container">
+        <!-- Floating angel wing decorations -->
+        <div class="wing wing-left"></div>
+        <div class="wing wing-right"></div>
+        
+        <!-- Glowing halo element -->
+        <div class="halo"></div>
+
+        <header class="celestial-header">
+            <h1 class="seraphim-title">
+                <i class="fas fa-cloud" style="color: var(--accent-color);"></i>
+                Heavenly Meme Generator
+                <i class="fas fa-feather-alt" style="color: var(--accent-color);"></i>
+            </h1>
+            <div class="divine-divider"></div>
+        </header>
+
+        <main class="ethereal-main">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="angelic-footer">
+            <div class="clouds"></div>
+            <p class="blessed-text">
+                © 2025 Celestial Meme Generator Project | 
+                <span class="angel-credits">Made with <i class="fas fa-heart" style="color: #ff6b6b;"></i> and divine inspiration</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Sparkle effects script -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f8f3ff 0%, #e2c6ff 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .heavenly-bg::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23c792ea' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        .angelic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .celestial-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .seraphim-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 1rem 0;
+            text-shadow: 0 2px 4px rgba(58, 46, 77, 0.1);
+            letter-spacing: 1px;
+        }
+        
+        .divine-divider {
+            height: 2px;
+            width: 150px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            margin: 1rem auto;
+            border: none;
+        }
+        
+        .ethereal-main {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--light-shadow);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .angelic-footer {
+            text-align: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .blessed-text {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .angel-credits {
+            font-style: italic;
+        }
+        
+        /* Wing decorations */
+        .wing {
+            position: fixed;
+            width: 200px;
+            height: 400px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+            z-index: -1;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        
+        .wing-left {
+            left: -50px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 400'%3E%3Cpath fill='%23c792ea' d='M200,200c0,110-50,200-100,200S0,310,0,200S50,0,100,0S200,90,200,200z'/%3E%3C/svg%3E");
+        }
+        
+        .wing-right {
+            right: -50px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 400'%3E%3Cpath fill='%23c792ea' d='M0,200c0,110,50,200,100,200s100-90,100-200S150,0,100,0S0,90,0,200z'/%3E%3C/svg%3E");
+        }
+        
+        /* Halo effect */
+        .halo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(199,146,234,0.05) 0%, rgba(199,146,234,0) 70%);
+            z-index: -2;
+            pointer-events: none;
+        }
+        
+        /* Cloud footer decoration */
+        .clouds::before {
+            content: "";
+            position: absolute;
+            top: -30px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23ffffff' d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' opacity='.25'/%3E%3Cpath fill='%23ffffff' d='M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z' opacity='.5'/%3E%3Cpath fill='%23ffffff' d='M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        
+        @media (max-width: 768px) {
+            .seraphim-title {
+                font-size: 2rem;
+            }
+            
+            .ethereal-main {
+                padding: 1.5rem;
+            }
+            
+            .wing {
+                display: none;
+            }
+        }
+    </style>
+</body>
+</html>
